@@ -1,0 +1,20 @@
+{
+    "name":         "neutron/plugin/neutron-showcase-bundle",
+    "description":  "To be completed",
+    "keywords":     ["portfolio,showcase,project"],
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name":     "Nikolay Georgiev",
+            "homepage": "http://example.com"
+        }
+    ],
+    "require":      {
+        "symfony/framework-bundle": ">=2.1,<2.2-dev"
+    },
+    "autoload":     {
+        "psr-0": { "Neutron\\Plugin\\ShowCaseBundle": "" }
+    },
+    "target-dir": "Neutron/Plugin/ShowCaseBundle"
+}
