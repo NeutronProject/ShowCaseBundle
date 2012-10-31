@@ -26,4 +26,73 @@ class Configuration implements ConfigurationInterface
 
         return $treeBuilder;
     }
+    
+    private function addGeneralConfigurations(ArrayNodeDefinition $node)
+    {
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->booleanNode('enable')->defaultFalse()->end()
+                ->scalarNode('translation_domain')->defaultValue('NeutronShowCaseBundle')->end()
+            ->end()
+        ;
+    }
+    
+    private function addShowCaseConfigurations(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                 ->arrayNode('show_case')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('reference_class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('manager')->defaultValue('neutron_show_case.show_case_manager.default')->end()
+                            ->scalarNode('controller_backend')->defaultValue('neutron_show_case.controller.backend.show_case.default')->end()
+                            ->scalarNode('controller_frontend')->defaultValue('neutron_show_case.controller.frontend.show_case.default')->end()
+                            ->scalarNode('datagrid_management')->defaultValue('neutron_show_case_management')->end()
+                            ->arrayNode('form_backend')
+                                ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('type')->defaultValue('neutron_backend_show_case')->end()
+                                        ->scalarNode('handler')->defaultValue('neutron_show_case.form.backend.handler.show_case.default')->end()
+                                        ->scalarNode('name')->defaultValue('neutron_backend_show_case')->end()
+                                        ->scalarNode('datagrid')->defaultValue('neutron_show_case_multi_select_sortable')->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+    
+    private function addProjectConfigurations(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                 ->arrayNode('project')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('manager')->defaultValue('neutron_show_case.project_manager.default')->end()
+                            ->scalarNode('controller_backend')->defaultValue('neutron_show_case.controller.backend.project.default')->end()
+                            ->scalarNode('controller_frontend')->defaultValue('neutron_show_case.controller.frontend.project.default')->end()
+                            ->scalarNode('datagrid_management')->defaultValue('neutron_show_case_project_management')->end()
+                            ->arrayNode('form_backend')
+                                ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('type')->defaultValue('neutron_backend_show_case_project')->end()
+                                        ->scalarNode('handler')->defaultValue('neutron_show_case.form.backend.handler.project.default')->end()
+                                        ->scalarNode('name')->defaultValue('neutron_backend_show_case_project')->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
 }
