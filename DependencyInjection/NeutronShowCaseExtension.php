@@ -48,6 +48,7 @@ class NeutronShowCaseExtension extends Extension
         $container->setAlias('neutron_show_case.controller.backend.show_case', $config['controller_backend']);    
         $container->setAlias('neutron_show_case.controller.frontend.show_case', $config['controller_frontend']);    
         $container->setParameter('neutron_show_case.datagrid.show_case_management', $config['datagrid_management']);    
+        $container->setParameter('neutron_show_case.show_case_templates', $config['templates']);    
         $container->setParameter('neutron_show_case.form.backend.type.show_case', $config['form_backend']['type']);    
         $container->setParameter('neutron_show_case.form.backend.name.show_case', $config['form_backend']['name']);    
         $container->setAlias('neutron_show_case.form.backend.handler.show_case', $config['form_backend']['handler']);    
@@ -61,6 +62,8 @@ class NeutronShowCaseExtension extends Extension
         $container->setAlias('neutron_show_case.controller.backend.project', $config['controller_backend']);    
         $container->setAlias('neutron_show_case.controller.frontend.project', $config['controller_frontend']);    
         $container->setParameter('neutron_show_case.datagrid.project_management', $config['datagrid_management']);    
+        $container->setParameter('neutron_show_case.project_templates', $config['templates']);    
+        $container->setParameter('neutron_show_case.project_image_options', $config['image_options']);    
         $container->setParameter('neutron_show_case.form.backend.type.project', $config['form_backend']['type']);    
         $container->setParameter('neutron_show_case.form.backend.name.project', $config['form_backend']['name']);    
         $container->setAlias('neutron_show_case.form.backend.handler.project', $config['form_backend']['handler']);    
