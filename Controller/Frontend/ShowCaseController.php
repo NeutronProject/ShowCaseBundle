@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\Plugin\ShowCaseBundle\Controller\Frontend;
 
-use Neutron\MvcBundle\Model\Category\CategoryInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -13,14 +13,23 @@ use Symfony\Component\HttpFoundation\Response;
 class ShowCaseController extends ContainerAware
 {
     
-    public function indexAction(CategoryInterface $category)
-    {   
+    public function indexAction($slug)
+    {           
 
-        $showCaseManager = $this->container->get('neutron_show_case.show_case_manager');
-        $entity = $showCaseManager->findOneBy(array('category' => $category));
+        $categoryManager = $this->container->get('neutron_mvc.category.manager');
+        
+        $entity = $categoryManager->findOneByCategorySlug(
+            $this->container->getParameter('neutron_show_case.show_case_class'), 
+            $slug,
+            $this->container->get('request')->getLocale()
+        );
         
         if (null === $entity){
             throw new NotFoundHttpException();
+        }
+        
+        if (false === $this->container->get('neutron_admin.acl.manager')->isGranted($entity->getCategory(), 'VIEW')){
+            throw new AccessDeniedException();
         }
        
         $template = $this->container->get('templating')->render(

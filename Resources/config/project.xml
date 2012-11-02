@@ -4,17 +4,150 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+
     <parameters>
-        <parameter key="neutron_show_case.example.class">Neutron\Plugin\ShowCaseBundle\Example</parameter>
+        <parameter key="neutron_show_case.doctrine.project_manager.default.class">Neutron\Plugin\ShowCaseBundle\Doctrine\ProjectManager</parameter>
+        <parameter key="neutron_show_case.controller.backend.project.default.class">Neutron\Plugin\ShowCaseBundle\Controller\Backend\ProjectController</parameter>
+        <parameter key="neutron_show_case.controller.frontend.project.default.class">Neutron\Plugin\ShowCaseBundle\Controller\Frontend\ProjectController</parameter>
+        <parameter key="neutron_show_case.form.backend.type.project.class">Neutron\Plugin\ShowCaseBundle\Form\Backend\Type\ProjectType</parameter>
+        <parameter key="neutron_show_case.form.backend.type.project.general.class">Neutron\Plugin\ShowCaseBundle\Form\Backend\Type\Project\GeneralType</parameter>
+        <parameter key="neutron_show_case.form.backend.handler.project.default.class">Neutron\Plugin\ShowCaseBundle\Form\Backend\Handler\ProjectHandler</parameter>
+        <parameter key="neutron_show_case.datagrid.builder.project_management.class">Neutron\Plugin\ShowCaseBundle\DataGrid\ProjectManagementDataGrid</parameter>
+        <parameter key="neutron_show_case.datagrid.builder.project_multi_select_sortable.class">Neutron\Plugin\ShowCaseBundle\DataGrid\ProjectMultiSelectSortableDataGrid</parameter>
     </parameters>
 
     <services>
-        <service id="neutron_show_case.example" class="%neutron_show_case.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="neutron_show_case.doctrine.project_manager.default" 
+        	class="%neutron_show_case.doctrine.project_manager.default.class%"
+        >       	
+            <call method="setClassName">
+            	<argument>%neutron_show_case.project_class%</argument>
+            </call>
+            <call method="setObjectManager">
+            	<argument type="service" id="object_manager" />
+            </call>
         </service>
+        
+        <service id="neutron_show_case.controller.backend.project.default" 
+      		class="%neutron_show_case.controller.backend.project.default.class%"
+        >	
+ 			<call method="setContainer">
+            	<argument type="service" id="service_container" />
+            </call>    
+        </service>
+        
+        <service id="neutron_show_case.controller.frontend.project.default" 
+      		class="%neutron_show_case.controller.frontend.project.default.class%"
+        >	
+ 			<call method="setContainer">
+            	<argument type="service" id="service_container" />
+            </call>    
+        </service>
+        
+        <service id="neutron_show_case.form.backend.project" 
+       		factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form"
+       	>
+            <argument>%neutron_show_case.form.backend.name.project%</argument>
+            <argument>%neutron_show_case.form.backend.type.project%</argument>
+        </service>
+        
+        <service id="neutron_show_case.form.backend.type.project"
+        	class="%neutron_show_case.form.backend.type.project.class%"
+        >         
+     
+            <tag name="form.type" alias="neutron_backend_show_case_project" />
+        </service>
+        
+        <service id="neutron_show_case.form.backend.type.project.general" 
+			class="%neutron_show_case.form.backend.type.project.general.class%"
+		>
+            
+			<call method="setProjectClass">
+            	<argument>%neutron_show_case.project_class%</argument>
+            </call>
+            
+			<call method="setProjectMainImageClass">
+            	<argument>%neutron_show_case.project_main_image_class%</argument>
+            </call>
+            
+			<call method="setMainImageOptions">
+            	<argument>%neutron_show_case.project_main_image_options%</argument>
+            </call>
+            
+			<call method="setProjectImageClass">
+            	<argument>%neutron_show_case.project_image_class%</argument>
+            </call>
+            
+			<call method="setImageOptions">
+            	<argument>%neutron_show_case.project_image_options%</argument>
+            </call>
+            
+			<call method="setTemplates">
+            	<argument>%neutron_show_case.project_templates%</argument>
+            </call>
+            
+			<call method="setTranslationDomain">
+            	<argument>%neutron_show_case.translation_domain%</argument>
+            </call>
+            
+            <tag name="form.type" alias="neutron_backend_show_case_project_general" />
+		</service>
+		
+	    <service id="neutron_show_case.form.backend.handler.project.default" 
+        	class="%neutron_show_case.form.backend.handler.project.default.class%"
+        >
+        	<call method="setContainer">
+        		<argument type="service" id="service_container" />
+        	</call>
+        	
+        	<call method="setForm">
+        		<argument type="service" id="neutron_show_case.form.backend.project" />
+        	</call>
+
+        	<call method="setTranslationDomain">
+        		<argument>%neutron_show_case.translation_domain%</argument>
+        	</call>
+        </service>
+        
+                
+        <service id="neutron_show_case.datagrid.builder.project_management" 
+        	class="%neutron_show_case.datagrid.builder.project_management.class%"
+        	scope="request"
+       	>
+        	<argument type="service" id="neutron_data_grid.factory" />
+        	<argument type="service" id="translator" />
+        	<argument type="service" id="router" />
+        	<argument type="service" id="neutron_show_case.project_manager" />
+        	<argument>%neutron_show_case.translation_domain%</argument>
+        </service>
+        
+        <service id="neutron_show_case.datagrid.project_management" 
+        	class="Neutron\Bundle\DataGridBundle\DataGrid\DataGrid"
+        	factory-service="neutron_show_case.datagrid.builder.project_management"
+        	factory-method="build"
+        >
+        	<tag name="neutron_data_grid.datagrid" alias="neutron_show_case_project_management" />
+        </service>
+                
+        <service id="neutron_show_case.datagrid.builder.project_multi_select_sortable" 
+        	class="%neutron_show_case.datagrid.builder.project_multi_select_sortable.class%"
+        	scope="request"
+       	>
+        	<argument type="service" id="neutron_data_grid.factory" />
+        	<argument type="service" id="translator" />
+        	<argument type="service" id="router" />
+        	<argument type="service" id="neutron_show_case.project_manager" />
+        	<argument>%neutron_show_case.translation_domain%</argument>
+        </service>
+        
+        <service id="neutron_show_case.datagrid.project_multi_select_sortable" 
+        	class="Neutron\Bundle\DataGridBundle\DataGrid\DataGrid"
+        	factory-service="neutron_show_case.datagrid.builder.project_multi_select_sortable"
+        	factory-method="build"
+        >
+        	<tag name="neutron_data_grid.datagrid" alias="neutron_show_case_project_multi_select_sortable" />
+        </service>
+        
     </services>
-    -->
+
 </container>

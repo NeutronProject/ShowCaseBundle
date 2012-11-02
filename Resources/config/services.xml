@@ -4,17 +4,27 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
+    
     <parameters>
-        <parameter key="neutron_show_case.example.class">Neutron\Plugin\ShowCaseBundle\Example</parameter>
+        <parameter key="neutron_show_case.plugin.builder.class">Neutron\Plugin\ShowCaseBundle\ShowCasePlugin</parameter>
     </parameters>
 
     <services>
-        <service id="neutron_show_case.example" class="%neutron_show_case.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="neutron_show_case.plugin.builder" class="%neutron_show_case.plugin.builder.class%">
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="neutron_mvc.plugin.factory" />
+            <argument type="service" id="router" />
+            <argument type="service" id="translator" />
+            <argument>%neutron_show_case.translation_domain%</argument>
+        </service>
+        
+        <service id="neutron_show_case.plugin" 
+        	class="Neutron\MvcBundle\Plugin\PluginFactory"
+        	factory-service="neutron_show_case.plugin.builder"
+        	factory-method="build"
+        >
+            <tag name="neutron.plugin" alias="neutron.plugin.show_case"/>
         </service>
     </services>
-    -->
+    
 </container>

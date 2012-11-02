@@ -16,6 +16,10 @@ class GeneralType extends AbstractType
       
     protected $projectClass;
     
+    protected $projectMainImageClass;
+    
+    protected $mainImageOptions;
+    
     protected $projectImageClass;
     
     protected $imageOptions;
@@ -29,8 +33,18 @@ class GeneralType extends AbstractType
         $this->projectClass = $projectClass;
     }
     
-    public function setProjectImageClass($projectImageClass)
+    public function setProjectMainImageClass($projectMainImageClass)
     {
+        $this->projectMainImageClass = $projectMainImageClass;
+    }
+    
+    public function setMainImageOptions(array $mainImageOptions)
+    {
+        $this->mainImageOptions = $mainImageOptions;
+    }
+    
+    public function setProjectImageClass($projectImageClass)
+    {   
         $this->projectImageClass = $projectImageClass;
     }
     
@@ -62,7 +76,6 @@ class GeneralType extends AbstractType
             ))
             ->add('description', 'neutron_input_limiter', array(
                 'label' => 'form.description',
-                'type' => 'textarea',
                 'configs' => array(
                     'limit' => 255
                 ),
@@ -82,11 +95,25 @@ class GeneralType extends AbstractType
                 ),
                 'translation_domain' => $this->translationDomain
             ))
+            ->add('mainImage', 'neutron_image_upload', array(
+                'label' => 'form.mainImage',
+                'data_class' => $this->projectMainImageClass,
+                'translation_domain' => $this->translationDomain,
+                'configs' => array(
+                    'minWidth' => $this->mainImageOptions['min_width'],
+                    'minHeight' => $this->mainImageOptions['min_height'],
+                    'extensions' => $this->mainImageOptions['extensions'],
+                    'maxSize' => $this->mainImageOptions['max_size'],
+                    'runtimes' => $this->mainImageOptions['runtimes']
+                ),
+            ))
             ->add('projectDate', 'neutron_datepicker', array(
                 'label' => 'form.projectDate',
                 'input' => 'datetime',
                 'attr' => array(),
-                'configs' => array(),
+                'configs' => array(
+                    'maxDate' => '+0'        
+                ),
                 'translation_domain' => $this->translationDomain
             ))
             ->add('clientName', 'text', array(
@@ -97,7 +124,8 @@ class GeneralType extends AbstractType
                 'label' => 'form.projectUrl',
                 'translation_domain' => $this->translationDomain
             ))
-            ->add('name', 'neutron_multi_image_upload_collection', array(
+            ->add('images', 'neutron_multi_image_upload_collection', array(
+                'label' => 'form.images',
                 'options' => array(
                     'data_class' => $this->projectImageClass
                 ),

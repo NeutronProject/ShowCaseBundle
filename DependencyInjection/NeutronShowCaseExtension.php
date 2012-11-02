@@ -23,10 +23,16 @@ class NeutronShowCaseExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        
+
         foreach (array('services', 'show_case', 'project') as $basename) {
             $loader->load(sprintf('%s.xml', $basename));
         }         
+        
+        $this->loadGeneralConfigurations($config, $container);
+        
+        $this->loadShowCaseConfigurations($config['show_case'], $container);
+        
+        $this->loadProjectConfigurations($config['project'], $container);
     }
     
     protected function loadGeneralConfigurations(array $config, ContainerBuilder $container)
@@ -58,12 +64,15 @@ class NeutronShowCaseExtension extends Extension
     protected function loadProjectConfigurations(array $config, ContainerBuilder $container)
     {
         $container->setParameter('neutron_show_case.project_class', $config['class']);
+        $container->setParameter('neutron_show_case.project_main_image_class', $config['main_image_class']);
+        $container->setParameter('neutron_show_case.project_image_class', $config['image_class']);
         $container->setAlias('neutron_show_case.project_manager', $config['manager']);    
         $container->setAlias('neutron_show_case.controller.backend.project', $config['controller_backend']);    
         $container->setAlias('neutron_show_case.controller.frontend.project', $config['controller_frontend']);    
         $container->setParameter('neutron_show_case.datagrid.project_management', $config['datagrid_management']);    
         $container->setParameter('neutron_show_case.project_templates', $config['templates']);    
         $container->setParameter('neutron_show_case.project_image_options', $config['image_options']);    
+        $container->setParameter('neutron_show_case.project_main_image_options', $config['main_image_options']);    
         $container->setParameter('neutron_show_case.form.backend.type.project', $config['form_backend']['type']);    
         $container->setParameter('neutron_show_case.form.backend.name.project', $config['form_backend']['name']);    
         $container->setAlias('neutron_show_case.form.backend.handler.project', $config['form_backend']['handler']);    

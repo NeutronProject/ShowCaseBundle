@@ -1,6 +1,12 @@
 <?php
 namespace Neutron\Plugin\ShowCaseBundle\Entity;
 
+use Neutron\Bundle\FormBundle\Model\ImageInterface;
+
+use Neutron\Bundle\FormBundle\Model\MultiImageInterface;
+
+use Neutron\SeoBundle\Model\SeoInterface;
+
 use Neutron\Plugin\ShowCaseBundle\Model\ProjectImageInterface;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -92,15 +98,9 @@ abstract class AbstractProject implements ProjectInterface, SluggableInterface, 
      */
     protected $template;
     
-    /**
-     * @ORM\ManyToMany(targetEntity="Neutron\Plugin\ShowCaseBundle\Model\ProjectImageInterface", cascade={"all"})
-     * @ORM\OrderBy({"position" = "ASC"})
-     * @ORM\JoinTable(
-     *   inverseJoinColumns={@ORM\JoinColumn(unique=true,  onDelete="CASCADE")}
-     * )
-     */
+    protected $mainImage;
+    
     protected $images;
- 
     
     /**
      * @Gedmo\Locale
@@ -206,7 +206,17 @@ abstract class AbstractProject implements ProjectInterface, SluggableInterface, 
         $this->template = $template;
     }
     
-    public function addImage(ProjectImageInterface $image)
+    public function setMainImage(ImageInterface $mainImage)
+    {
+        $this->mainImage = $mainImage;
+    }
+    
+    public function getMainImage()
+    {
+        return $this->mainImage;
+    }
+    
+    public function addImage(MultiImageInterface $image)
     {
         if (!$this->images->contains($image)){
             $this->images->add($image);
@@ -225,7 +235,7 @@ abstract class AbstractProject implements ProjectInterface, SluggableInterface, 
         return $this->images;
     }
     
-    public function removeImage(ProjectImageInterface $image)
+    public function removeImage(MultiImageInterface $image)
     {
         if ($this->images->contains($image)){
             $this->images->removeElement($image);

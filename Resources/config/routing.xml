@@ -4,5 +4,45 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="neutron_show_case.backend.show_case" pattern="/admin/plugin/show-case">
+        <default key="_controller">neutron_show_case.controller.backend.show_case:indexAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
 
+    <route id="neutron_show_case.backend.show_case.update" pattern="/admin/plugin/show-case/update/{id}">
+        <default key="_controller">neutron_show_case.controller.backend.show_case:updateAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
+
+    <route id="neutron_show_case.backend.show_case.delete" pattern="/admin/plugin/show-case/delete/{id}">
+        <default key="_controller">neutron_show_case.controller.backend.show_case:deleteAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
+
+    <route id="neutron_show_case.backend.project" pattern="/admin/plugin/show-case/project">
+        <default key="_controller">neutron_show_case.controller.backend.project:indexAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
+
+    <route id="neutron_show_case.backend.project.update" pattern="/admin/plugin/show-case/project/update/{id}">
+        <default key="_controller">neutron_show_case.controller.backend.project:updateAction</default>
+        <default key="id">0</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
+
+    <route id="neutron_show_case.backend.project.delete" pattern="/admin/plugin/show-case/project/delete/{id}">
+        <default key="_controller">neutron_show_case.controller.backend.project:deleteAction</default>
+        <requirement key="_method">GET|POST</requirement>
+    </route>
+
+    <route id="neutron_show_case.frontend.show_case" pattern="/show-case/{slug}">
+        <default key="_controller">neutron_show_case.controller.frontend.show_case:indexAction</default>
+        <requirement key="_method">GET</requirement>
+    </route> 
+
+    <route id="neutron_show_case.frontend.project" pattern="/show-case/{categorySlug}/{projectSlug}">
+        <default key="_controller">neutron_show_case.controller.frontend.project:indexAction</default>
+        <requirement key="_method">GET</requirement>
+    </route> 
+    
 </routes>

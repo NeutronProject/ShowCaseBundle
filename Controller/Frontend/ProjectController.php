@@ -40,7 +40,7 @@ class ProjectController extends ContainerAware
         $template = $this->container->get('templating')->render(
             $project->getTemplate(), array(
                 'category' => $category,
-                'project' => $project,     
+                'entity' => $project,     
             )
         );
     

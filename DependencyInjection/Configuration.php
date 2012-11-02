@@ -2,6 +2,8 @@
 
 namespace Neutron\Plugin\ShowCaseBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -20,9 +22,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('neutron_show_case');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $this->addGeneralConfigurations($rootNode);
+        
+        $this->addShowCaseConfigurations($rootNode);
+        
+        $this->addProjectConfigurations($rootNode);
 
         return $treeBuilder;
     }
@@ -47,7 +51,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
                             ->scalarNode('reference_class')->isRequired()->cannotBeEmpty()->end()
-                            ->scalarNode('manager')->defaultValue('neutron_show_case.show_case_manager.default')->end()
+                            ->scalarNode('manager')->defaultValue('neutron_show_case.doctrine.show_case_manager.default')->end()
                             ->scalarNode('controller_backend')->defaultValue('neutron_show_case.controller.backend.show_case.default')->end()
                             ->scalarNode('controller_frontend')->defaultValue('neutron_show_case.controller.frontend.show_case.default')->end()
                             ->scalarNode('datagrid_management')->defaultValue('neutron_show_case_management')->end()
@@ -61,13 +65,12 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->arrayNode('form_backend')
                                 ->addDefaultsIfNotSet()
-                                    ->children()
-                                        ->scalarNode('type')->defaultValue('neutron_backend_show_case')->end()
-                                        ->scalarNode('handler')->defaultValue('neutron_show_case.form.backend.handler.show_case.default')->end()
-                                        ->scalarNode('name')->defaultValue('neutron_backend_show_case')->end()
-                                        ->scalarNode('datagrid')->defaultValue('neutron_show_case_project_multi_select_sortable')->end()
-                                    ->end()
-                                ->end()
+                                ->children()
+                                    ->scalarNode('type')->defaultValue('neutron_backend_show_case')->end()
+                                    ->scalarNode('handler')->defaultValue('neutron_show_case.form.backend.handler.show_case.default')->end()
+                                    ->scalarNode('name')->defaultValue('neutron_backend_show_case')->end()
+                                    ->scalarNode('datagrid')->defaultValue('neutron_show_case_project_multi_select_sortable')->end()
+                                ->end()  
                             ->end()
                         ->end()
                     ->end()
@@ -84,7 +87,9 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
-                            ->scalarNode('manager')->defaultValue('neutron_show_case.project_manager.default')->end()
+                            ->scalarNode('main_image_class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('image_class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('manager')->defaultValue('neutron_show_case.doctrine.project_manager.default')->end()
                             ->scalarNode('controller_backend')->defaultValue('neutron_show_case.controller.backend.project.default')->end()
                             ->scalarNode('controller_frontend')->defaultValue('neutron_show_case.controller.frontend.project.default')->end()
                             ->scalarNode('datagrid_management')->defaultValue('neutron_show_case_project_management')->end()
@@ -98,22 +103,30 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->arrayNode('form_backend')
                                 ->addDefaultsIfNotSet()
-                                    ->children()
-                                        ->scalarNode('type')->defaultValue('neutron_backend_show_case_project')->end()
-                                        ->scalarNode('handler')->defaultValue('neutron_show_case.form.backend.handler.project.default')->end()
-                                        ->scalarNode('name')->defaultValue('neutron_backend_show_case_project')->end()
-                                    ->end()
+                                ->children()
+                                    ->scalarNode('type')->defaultValue('neutron_backend_show_case_project')->end()
+                                    ->scalarNode('handler')->defaultValue('neutron_show_case.form.backend.handler.project.default')->end()
+                                    ->scalarNode('name')->defaultValue('neutron_backend_show_case_project')->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('main_image_options')
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('min_width')->isRequired()->cannotBeEmpty()->end()
+                                    ->scalarNode('min_height')->isRequired()->cannotBeEmpty()->end()
+                                    ->scalarNode('extensions')->defaultValue('jpeg,jpg')->end()
+                                    ->scalarNode('max_size')->defaultValue('2M')->end()
+                                    ->scalarNode('runtimes')->defaultValue('html5,flash')->end()
                                 ->end()
                             ->end()
                             ->arrayNode('image_options')
                                 ->addDefaultsIfNotSet()
-                                    ->children()
-                                        ->scalarNode('min_width')->isRequired()->cannotBeEmpty()->end()
-                                        ->scalarNode('min_height')->isRequired()->cannotBeEmpty()->end()
-                                        ->scalarNode('extensions')->defaultValue('jpeg,jpg')->end()
-                                        ->scalarNode('max_size')->defaultValue('2M')->end()
-                                        ->scalarNode('runtimes')->defaultValue('html5,flash')->end()
-                                    ->end()
+                                ->children()
+                                    ->scalarNode('min_width')->isRequired()->cannotBeEmpty()->end()
+                                    ->scalarNode('min_height')->isRequired()->cannotBeEmpty()->end()
+                                    ->scalarNode('extensions')->defaultValue('jpeg,jpg')->end()
+                                    ->scalarNode('max_size')->defaultValue('2M')->end()
+                                    ->scalarNode('runtimes')->defaultValue('html5,flash')->end()
                                 ->end()
                             ->end()
                         ->end()

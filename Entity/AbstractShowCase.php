@@ -1,6 +1,10 @@
 <?php
 namespace Neutron\Plugin\ShowCaseBundle\Entity;
 
+use Neutron\SeoBundle\Model\SeoInterface;
+
+use Neutron\MvcBundle\Model\Category\CategoryInterface;
+
 use Neutron\SeoBundle\Model\SeoAwareInterface;
 
 use Neutron\MvcBundle\Model\CategoryAwareInterface;
@@ -105,15 +109,16 @@ abstract class AbstractShowCase implements ShowCaseInterface, CategoryAwareInter
         return $this->projectReferences;
     }
     
-    public function addProjectReferences(ProjectReferenceInterface $projectReference)
-    {
-        if (!$this->projectReferences->contains($projectReference)){
+    public function addProjectReference(ProjectReferenceInterface $projectReference)
+    { 
+        if (!$this->projectReferences->contains($projectReference)){ 
             $this->projectReferences->add($projectReference);
             $projectReference->setShowCase($this);
         }
     
         return $this;
     }
+    
     
     public function removeProjectReference(ProjectReferenceInterface $projectReference)
     {

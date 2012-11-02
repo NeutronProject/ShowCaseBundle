@@ -66,7 +66,9 @@ class ContentType extends AbstractType
                 'translation_domain' => $this->translationDomain
             ))
             ->add('projectReferences', 'neutron_multi_select_sortable_collection', array(
+                'label' => 'form.projectReference',
                 'grid' => $this->dataGrid,
+                'translation_domain' => $this->translationDomain,
                 'options' => array(
                     'data_class' => $this->projectReferenceClass,
                     'inversed_class' => $this->projectClass,

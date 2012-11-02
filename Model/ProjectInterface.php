@@ -1,6 +1,10 @@
 <?php
 namespace Neutron\Plugin\ShowCaseBundle\Model;
 
+use Neutron\Bundle\FormBundle\Model\ImageInterface;
+
+use Neutron\Bundle\FormBundle\Model\MultiImageInterface;
+
 interface ProjectInterface
 {
     public function getId();
@@ -33,11 +37,15 @@ interface ProjectInterface
     
     public function setTemplate($template);
     
-    public function addImage(ProjectImageInterface $image);
+    public function setMainImage(ImageInterface $mainImage);
+    
+    public function getMainImage();
+    
+    public function addImage(MultiImageInterface $image);
     
     public function setImages(array $images);
     
     public function getImages();
     
-    public function removeImage(ProjectImageInterface$image);
+    public function removeImage(MultiImageInterface $image);
 }

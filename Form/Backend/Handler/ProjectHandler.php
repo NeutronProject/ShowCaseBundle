@@ -9,7 +9,7 @@ class ProjectHandler extends AbstractFormHandler
     {   
         $general = $this->form->get('general')->getData();
 
-        $this->container->get('neutron_show_case.project_manager')->update($general);
+        $this->container->get('neutron_show_case.project_manager')->update($general, true);
     }
     
     protected function getRedirectUrl()
